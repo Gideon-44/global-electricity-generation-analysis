@@ -167,18 +167,55 @@ Figures are saved in `outputs/figures/`, while processed datasets are saved in `
 
 The project uses Python and the packages listed in `requirements.txt`.
 
-To reproduce the analysis:
+Follow these steps to reproduce the analysis:
 
-1. Clone or download the repository.
-2. Create and activate a Python virtual environment.
-3. Install the required packages.
-4. Ensure the raw OWID dataset is available in `data/raw/`.
-5. Run the data cleaning and analysis scripts in `src/`.
-6. Run the automated tests using:
+1. Clone or download this repository.
+2. Open the project directory in your terminal.
+3. Create a Python virtual environment:
 
-```bash
-python -m pytest -v
-```
+   ```bash
+   python -m venv .venv
+   ```
+
+4. Activate the virtual environment.
+
+   **Windows (Command Prompt):**
+   ```cmd
+   .venv\Scripts\activate.bat
+   ```
+
+   **macOS/Linux:**
+   ```bash
+   source .venv/bin/activate
+   ```
+
+5. Install the required packages:
+
+   ```bash
+   python -m pip install -r requirements.txt
+   ```
+
+6. Download the raw Our World in Data electricity dataset:
+
+   ```bash
+   python src/download_data.py
+   ```
+
+7. Run the data cleaning script:
+
+   ```bash
+   python src/clean_data.py
+   ```
+
+8. Run the analysis scripts in `src/` to regenerate the tables and visualisations.
+
+9. Run the automated data quality tests:
+
+   ```bash
+   python -m pytest -v
+   ```
+
+The raw dataset is downloaded into `data/raw/`, while cleaned datasets, analysis outputs and visualisations are saved in their respective project folders.
 
 ## Future Improvements
 

@@ -184,7 +184,7 @@ def clean_dataset():
     print(f"Records removed: {original_rows - len(df):,}")
 
     print(
-        "Unique countries:",
+        "Unique entities:",
         df["iso_code"].nunique()
     )
 

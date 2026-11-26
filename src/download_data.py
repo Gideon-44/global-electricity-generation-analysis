@@ -15,22 +15,44 @@ PROJECT_DIR = Path(__file__).resolve().parents[1]
 OUTPUT_DIR = PROJECT_DIR / "data" / "raw"
 OUTPUT_FILE = OUTPUT_DIR / "owid_energy.csv"
 
+
 def download_dataset():
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
+    temp_file = OUTPUT_DIR / "owid_energy.tmp"
+
     print("Starting dataset download...")
 
-    response = requests.get(DATA_URL, timeout=120)
-    response.raise_for_status()
+    try:
+        with requests.get(
+            DATA_URL,
+            stream=True,
+            timeout=(15, 120)
+        ) as response:
+            response.raise_for_status()
 
-    OUTPUT_FILE.write_bytes(response.content)
+            with temp_file.open("wb") as file:
+                for chunk in response.iter_content(chunk_size=1024 * 1024):
+                    if chunk:
+                        file.write(chunk)
 
-    file_size_mb = OUTPUT_FILE.stat().st_size / (1024 * 1024)
+        # Replace the existing dataset only after a successful download
+        temp_file.replace(OUTPUT_FILE)
 
-    print("Download successful!")
-    print(f"Saved to: {OUTPUT_FILE}")
-    print(f"File size: {file_size_mb:.2f} MB")
+        file_size_mb = OUTPUT_FILE.stat().st_size / (1024 * 1024)
 
+        print("Download successful!")
+        print(f"Saved to: {OUTPUT_FILE}")
+        print(f"File size: {file_size_mb:.2f} MB")
+
+    except requests.RequestException as error:
+        temp_file.unlink(missing_ok=True)
+        print(f"Download failed: {error}")
+        raise
+
+    except OSError:
+        temp_file.unlink(missing_ok=True)
+        raise
 
 if __name__ == "__main__":
     download_dataset()
