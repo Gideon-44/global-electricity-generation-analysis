@@ -2,20 +2,23 @@
 
 ## Project Overview
 
-This project analyses global electricity generation using data from Our World in Data (OWID).
+This project analyses global electricity generation from 1900 to 2025 using data from [Our World in Data (OWID)](https://ourworldindata.org/energy).
 
-The analysis explores how electricity generation has changed over time, the contribution of different energy sources, and how electricity generation and energy mixes compare across selected countries.
+The analysis explores long-term changes in electricity generation, the contribution of different energy sources, and differences in electricity generation and energy mixes across selected countries.
 
-The project uses Python for data cleaning, validation, analysis and visualisation.
+The project also includes a focused analysis of Kenya's electricity generation, renewable energy sources and changes in its electricity mix between 2000 and 2025.
+
+Python is used throughout the project for data inspection, cleaning, validation, analysis and visualisation.
 
 ## Project Objectives
 
 - Analyse long-term trends in global electricity generation.
 - Compare fossil fuel and low-carbon electricity generation.
-- Examine the contribution of individual electricity sources.
+- Examine the contribution and growth of individual electricity sources.
 - Compare electricity generation across China, the United States, India, Germany and Kenya.
 - Analyse changes in national electricity generation and energy mixes between 2000 and 2025.
-- Apply data quality checks to improve the reliability of the analysis.
+- Investigate Kenya's renewable electricity generation and its evolution over time.
+- Apply automated data quality checks to improve the reliability of the analysis.
 
 ## Tools and Technologies
 
@@ -33,9 +36,13 @@ The project uses Python for data cleaning, validation, analysis and visualisatio
 
 **Dataset:** [OWID Energy Dataset](https://catalog.ourworldindata.org/garden/energy/2026-09-10/owid_energy/owid_energy.csv)
 
-The dataset contains electricity generation information for countries and regional aggregates across multiple years.
+**Dataset snapshot:** 10 September 2026.
+
+The original dataset contains electricity generation information for countries and regional aggregates across multiple years.
 
 Generation values are measured in terawatt-hours (TWh).
+
+The project uses selected electricity generation variables from the original dataset. The raw dataset is retained separately from the cleaned analytical dataset.
 
 ## Project Structure
 
@@ -45,16 +52,41 @@ project-1-electricity-generation/
 ├── data/
 │   ├── raw/
 │   │   └── owid_energy.csv
+│   │
 │   └── processed/
+│       ├── electricity_generation_clean.csv
+│       ├── country_generation_2025.csv
+│       ├── country_electricity_mix_2025.csv
+│       ├── country_electricity_growth_2000_2025.csv
+│       ├── country_electricity_mix_change.csv
+│       └── kenya_electricity_analysis_2000_2025.csv
 │
 ├── notebooks/
+│   └── electricity_generation_analysis.ipynb
 │
 ├── src/
+│   ├── download_data.py
+│   ├── inspect_data.py
+│   ├── profile_electricity_data.py
+│   ├── clean_data.py
+│   └── analysis scripts
 │
 ├── tests/
+│   └── test_data_quality.py
 │
 ├── outputs/
 │   └── figures/
+│       ├── global_electricity_generation.png
+│       ├── global_electricity_mix.png
+│       ├── major_electricity_sources.png
+│       ├── emerging_electricity_sources.png
+│       ├── country_electricity_mix_2025.png
+│       ├── country_generation_growth_2000_2025.png
+│       ├── country_percentage_growth_2000_2025.png
+│       ├── country_renewable_share_change.png
+│       ├── kenya_electricity_generation_growth.png
+│       ├── kenya_electricity_mix_trend.png
+│       └── kenya_renewable_sources_trend.png
 │
 ├── README.md
 ├── requirements.txt
@@ -72,160 +104,256 @@ Inspected the original dataset to understand its structure, available variables,
 - Selected relevant electricity generation variables.
 - Retained standard three-letter ISO-coded entities and the World aggregate.
 - Checked for duplicate entity-year records.
-- Reviewed missing and negative generation values.
-- Saved the cleaned dataset for analysis.
+- Reviewed missing and negative electricity generation values.
+- Saved the cleaned dataset for subsequent analysis.
 
-Missing values were not automatically treated as zero.
+Missing values were not automatically treated as zero because an unavailable observation does not necessarily indicate zero electricity generation.
 
 ### 3. Data Quality Testing
 
-Created automated tests to check:
+Created automated tests using pytest to check:
 
 - Required columns.
 - Valid entity names and years.
 - ISO code formatting.
 - Duplicate entity-year records.
-- Negative generation values.
+- Negative electricity generation values.
 - Missing electricity generation values.
 - Electricity mix percentage consistency.
 
-All eight data quality tests passed during the project validation.
+**All eight automated data quality tests passed** during project validation.
 
-### 4. Analysis and Visualisation
+### 4. Exploratory Data Analysis
 
-Used Python and Matplotlib to examine global electricity generation, energy sources, country-level generation, growth and changes in electricity mix.
+Used Pandas and NumPy to calculate electricity generation totals, source contributions, percentage shares, growth rates and compound annual growth rates (CAGR).
+
+### 5. Data Visualisation
+
+Used Matplotlib and Seaborn to create visualisations showing global electricity trends, energy source contributions, country comparisons and Kenya's renewable electricity development.
 
 ## Key Findings
 
-### Global Electricity Generation
+### 1. Global Electricity Generation
 
-- Global electricity generation increased from approximately **6.36 TWh in 1900** to **31,772.35 TWh in 2025**.
-- This demonstrates substantial long-term growth in electricity production.
+Global electricity generation increased substantially between 1900 and 2025.
 
-### Global Electricity Mix in 2025
+- 1900: approximately 6.36 TWh.
+- 2025: approximately 31,772.35 TWh.
+
+The analysis shows substantial long-term growth in global electricity production, with stronger expansion during the later decades.
+
+### 2. Global Electricity Mix in 2025
+
+In 2025:
 
 - Fossil fuels accounted for approximately **57.39%** of global electricity generation.
 - Low-carbon sources accounted for approximately **42.61%**.
 
 Low-carbon electricity includes renewable sources and nuclear power.
 
-### Electricity Sources
+The analysis also shows that the low-carbon share increased between 2010 and 2025, while the fossil fuel share declined over the same period.
+
+### 3. Electricity Sources
 
 In 2025:
 
 - Coal remained the largest individual electricity source, contributing approximately **32.96%** of global generation.
+- Natural gas contributed approximately **21.78%**.
+- Hydropower contributed approximately **13.96%**.
 - Solar and wind together contributed approximately **17.29%**.
-- Gas generation increased substantially between 2000 and 2025.
-- Oil-fired electricity generation declined over the same period.
+- Oil-fired electricity generation declined between 2000 and 2025.
 
-### Country Comparisons
+Solar and wind experienced particularly strong growth over the period, although their percentage growth rates are influenced by their relatively small starting values.
 
-The analysis of five selected countries found that:
+### 4. Country Comparisons
 
-- China had the highest electricity generation among the five countries in 2025, at approximately 10,583.36 TWh.
-- The United States generated approximately 4,519.79 TWh.
-- India generated approximately 2,081.60 TWh.
-- Germany generated approximately 500.47 TWh.
-- Kenya generated approximately 14.04 TWh.
+The analysis compared electricity generation across five selected countries in 2025.
 
-### Changes in Renewable Electricity Share
+| Country | Electricity generation (TWh) |
+|---|---:|
+| China | 10,583.36 |
+| United States | 4,519.79 |
+| India | 2,081.60 |
+| Germany | 500.47 |
+| Kenya | 14.04 |
 
-Between 2000 and 2025, the renewable share of electricity generation increased in all five selected countries:
+China had the highest electricity generation among the five selected countries.
 
-- Germany: approximately 52.87 percentage-point increase.
-- Kenya: approximately 49.66 percentage-point increase.
-- China: approximately 20.40 percentage-point increase.
-- United States: approximately 16.41 percentage-point increase.
-- India: approximately 10.02 percentage-point increase.
+The electricity mix analysis also showed substantial differences in the contribution of renewable, fossil fuel and nuclear generation across these countries.
 
-These are changes in electricity mix percentages, not changes in absolute electricity generation.
+### 5. Changes in Renewable Electricity Share
 
-## Outputs
+Between 2000 and 2025, the renewable share of electricity generation increased in all five selected countries.
 
-The project produces analytical datasets and visualisations, including:
+| Country | Change in renewable share |
+|---|---:|
+| Germany | +52.87 percentage points |
+| Kenya | +49.66 percentage points |
+| China | +20.40 percentage points |
+| United States | +16.41 percentage points |
+| India | +10.02 percentage points |
 
-- Global electricity generation trend.
+These figures represent percentage-point changes in electricity mix, not percentage growth in electricity generation.
+
+### 6. Kenya Electricity Analysis
+
+Kenya received additional attention through a country-specific analysis covering 2000 to 2025.
+
+Key findings include:
+
+- Total electricity generation increased from approximately **4.31 TWh in 2000** to **14.04 TWh in 2025**.
+- This represents an increase of approximately **225.75%**, with a compound annual growth rate of approximately **4.84%**.
+- Renewable sources accounted for approximately **90.03%** of electricity generation in 2025.
+- Fossil fuels accounted for approximately **9.97%**.
+- Hydropower remained an important contributor, while wind and solar generation expanded.
+- The category labelled other renewables excluding bioenergy reached approximately **6.45 TWh** in 2025.
+
+The findings indicate that Kenya's renewable electricity mix became more diversified over the analysis period.
+
+The other renewables category is retained under the dataset's original classification. Its entire contribution is not automatically attributed to geothermal generation without further verification.
+
+## Project Outputs
+
+### Analytical Datasets
+
+Processed datasets are saved in `data/processed/`.
+
+Important outputs include:
+
+- `electricity_generation_clean.csv` – cleaned electricity generation dataset.
+- `country_generation_2025.csv` – electricity generation across the five selected countries.
+- `country_electricity_mix_2025.csv` – national electricity mix in 2025.
+- `country_electricity_growth_2000_2025.csv` – country generation growth between 2000 and 2025.
+- `country_electricity_mix_change.csv` – changes in country electricity mixes between 2000 and 2025.
+- `kenya_electricity_analysis_2000_2025.csv` – Kenya's annual electricity generation and mix analysis.
+
+### Visualisations
+
+Charts are saved in `outputs/figures/`.
+
+They cover:
+
+- Global electricity generation trends.
 - Global fossil fuel and low-carbon electricity mix.
 - Major and emerging electricity source trends.
 - Country electricity generation comparisons.
 - Country electricity mix comparisons.
-- Country generation growth comparisons.
+- Country generation growth.
 - Changes in renewable electricity shares.
+- Kenya's electricity generation growth.
+- Kenya's electricity mix trends.
+- Kenya's renewable electricity generation by source.
 
-Figures are saved in `outputs/figures/`, while processed datasets are saved in `data/processed/`.
+### Jupyter Notebook
+
+The main exploratory analysis is documented in:
+
+`notebooks/electricity_generation_analysis.ipynb`
+
+The notebook brings together data loading, inspection, analysis, visualisation and interpretation.
 
 ## Data Quality and Limitations
 
 - Electricity generation data availability varies by country and year.
-- Historical values may be estimated or revised.
+- Historical values may be estimated or revised by the data provider.
 - Missing values should not be interpreted as zero generation.
 - The country comparison focuses on five selected countries and is not a complete global country ranking.
 - Electricity mix percentages describe the relative contribution of sources, not their absolute generation.
+- Some aggregated energy-source categories require additional investigation before their individual technologies can be identified.
 - The analysis is descriptive and does not establish causal relationships.
+- Electricity generation should not be confused with installed generation capacity or total energy consumption.
 
 ## Reproducibility
 
 The project uses Python and the packages listed in `requirements.txt`.
 
-Follow these steps to reproduce the analysis:
+### 1. Clone the Repository
 
-1. Clone or download this repository.
-2. Open the project directory in your terminal.
-3. Create a Python virtual environment:
+```bash
+git clone https://github.com/Gideon-44/global-electricity-generation-analysis.git
+```
 
-   ```bash
-   python -m venv .venv
-   ```
+Navigate into the project directory:
 
-4. Activate the virtual environment.
+```bash
+cd global-electricity-generation-analysis
+```
 
-   **Windows (Command Prompt):**
-   ```cmd
-   .venv\Scripts\activate.bat
-   ```
+### 2. Create a Virtual Environment
 
-   **macOS/Linux:**
-   ```bash
-   source .venv/bin/activate
-   ```
+```bash
+python -m venv .venv
+```
 
-5. Install the required packages:
+### 3. Activate the Virtual Environment
 
-   ```bash
-   python -m pip install -r requirements.txt
-   ```
+**Windows (Command Prompt):**
 
-6. Download the raw Our World in Data electricity dataset:
+```cmd
+.venv\Scripts\activate.bat
+```
 
-   ```bash
-   python src/download_data.py
-   ```
+**macOS/Linux:**
 
-7. Run the data cleaning script:
+```bash
+source .venv/bin/activate
+```
 
-   ```bash
-   python src/clean_data.py
-   ```
+### 4. Install Dependencies
 
-8. Run the analysis scripts in `src/` to regenerate the tables and visualisations.
+```bash
+python -m pip install -r requirements.txt
+```
 
-9. Run the automated data quality tests:
+### 5. Download the Raw Dataset
 
-   ```bash
-   python -m pytest -v
-   ```
+```bash
+python src/download_data.py
+```
 
-The raw dataset is downloaded into `data/raw/`, while cleaned datasets, analysis outputs and visualisations are saved in their respective project folders.
+This downloads the OWID dataset into `data/raw/`.
+
+### 6. Run the Data Cleaning Script
+
+```bash
+python src/clean_data.py
+```
+
+The cleaned dataset is saved in `data/processed/`.
+
+### 7. Run the Analysis
+
+Run the relevant analysis scripts in the `src/` directory to regenerate the analytical outputs and visualisations.
+
+### 8. Run the Jupyter Notebook
+
+Open the project directory in VS Code, select the project's Python virtual environment as the notebook kernel, and open:
+
+`notebooks/electricity_generation_analysis.ipynb`
+
+Run all notebook cells to reproduce the documented exploratory analysis.
+
+### 9. Run the Automated Tests
+
+```bash
+python -m pytest -v
+```
+
+The tests check the cleaned data and selected analytical outputs for consistency.
 
 ## Future Improvements
 
-- Develop an automated data download process.
-- Expand the country comparison to include more countries.
-- Build an interactive dashboard.
-- Explore electricity generation trends alongside energy demand and emissions.
-- Add further statistical analysis of changes in electricity generation.
+Potential extensions to the project include:
+
+- Expanding the country comparison to include additional countries.
+- Developing an interactive electricity data dashboard.
+- Comparing electricity generation with energy demand and carbon emissions.
+- Incorporating population-adjusted electricity generation.
+- Investigating the relationship between renewable electricity generation, installed capacity and energy policy.
+- Adding further statistical analysis and forecasting.
 
 ## Author
 
-Energy Data Analysis Portfolio Project
+**Energy Data Analysis Portfolio Project**
 
+Developed using Python, Pandas, NumPy, Matplotlib, Seaborn and Jupyter Notebook.
