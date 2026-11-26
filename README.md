@@ -65,11 +65,27 @@ project-1-electricity-generation/
 │   └── electricity_generation_analysis.ipynb
 │
 ├── src/
-│   ├── download_data.py
-│   ├── inspect_data.py
-│   ├── profile_electricity_data.py
-│   ├── clean_data.py
-│   └── analysis scripts
+├── download_data.py
+├── inspect_data.py
+├── profile_electricity_data.py
+├── clean_data.py
+│
+├── analyse_electricity.py
+├── analyse_electricity_mix.py
+├── analyse_energy_sources.py
+├── calculate_source_growth.py
+│
+├── analyse_country_generation.py
+├── analyse_country_growth.py
+├── analyse_country_mix.py
+├── analyse_country_mix_change.py
+│
+├── plot_country_growth.py
+├── plot_country_mix.py
+├── plot_country_mix_change.py
+├── plot_country_percentage_growth.py
+│
+└── supporting investigation and validation scripts
 │
 ├── tests/
 │   └── test_data_quality.py
@@ -352,8 +368,29 @@ Potential extensions to the project include:
 - Investigating the relationship between renewable electricity generation, installed capacity and energy policy.
 - Adding further statistical analysis and forecasting.
 
+## Selected Visualisations
+
+### Global Electricity Generation
+
+![Global electricity generation from 1900 to 2025](outputs/figures/global_electricity_generation.png)
+
+### Global Electricity Mix
+
+![Global fossil fuel and low-carbon electricity mix](outputs/figures/global_electricity_mix.png)
+
+### Renewable Share Across Selected Countries
+
+![Change in renewable electricity share between 2000 and 2025](outputs/figures/country_renewable_share_change.png)
+
+### Kenya's Renewable Electricity Sources
+
+![Kenya renewable electricity generation by source](outputs/figures/kenya_renewable_sources_trend.png)
 ## Author
 
-**Energy Data Analysis Portfolio Project**
+**Gideon Wambua**
+
+Energy Data Analyst Portfolio Project
 
 Developed using Python, Pandas, NumPy, Matplotlib, Seaborn and Jupyter Notebook.
+
+[GitHub Profile](https://github.com/Gideon-44)
